@@ -28,6 +28,8 @@
 
 /* Стиль для кнопки "Удалить" */
 .todo-deleteBtn {
+    width: 35px;
+    height: 35px;
     background-color: #e74c3c;
     color: #fff;
     border: none;
@@ -38,4 +40,10 @@
 
 .todo-deleteBtn:hover {
     background-color: #c0392b;
+}
+
+.todo-list-container {
+    margin-left: 14px;
+    max-height: 553px;
+    overflow-y: auto;
 }

@@ -21,7 +21,7 @@ h1 {
     margin: 0;
 }
 
-form {
+.main {
     width: 500px;
     margin: 2rem auto;
     display: flex;
@@ -29,8 +29,8 @@ form {
     gap: 1rem;
 }
 
-form input,
-form select {
+.main input,
+.main select {
     padding: 0.5rem 1rem;
 }
 
@@ -38,7 +38,7 @@ input[type="text"] {
     width: 100%;
 }
 
-form>button {
+.main>button {
     cursor: pointer;
     background-color: mediumorchid;
     color: white;
@@ -46,7 +46,7 @@ form>button {
     padding: 0.5rem 0.8rem;
 }
 
-form>button:hover {
+.main>button:hover {
     background-color: violet;
 }
 

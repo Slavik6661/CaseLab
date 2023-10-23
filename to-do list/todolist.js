@@ -57,7 +57,6 @@ export default class todoList {
       if (updatedTodo != undefined) {
         this.updateToDo(postId)
       } else {
-        console.log(e.target);
         e.target.checked = false;
       }
     }))
@@ -99,45 +98,33 @@ export default class todoList {
     const divToClear = document.querySelector("#todo-list");
     divToClear.innerHTML = ''
   }
+
   async createNewTask() {
     let userID = globalState.get('userId')
     let newTask = document.getElementById('new-todo')
     this.arrayTodo = [...globalState.get('arrayTodo')]
-    let newToDo = await newTodoApi(userID, newTask.value)
-    this.arrayTodo.push(newToDo)
-    updateState('arrayTodo', this.arrayTodo)
-    console.log('newTodo');
-    console.log(this.arrayTodo);
-    this.renderTodoList(this.arrayTodo)
-  }
-
-  async updateToDo(postId) {
-    try {
-      const updatedTodo = await updatedTodoApi(postId);
-      console.log('Updated Todo: ' + JSON.stringify(updatedTodo, null, 2));
-      // Найдем индекс задачи в массиве arrayTodo
-      const index = this.arrayTodo.findIndex(todo => todo.id === postId);
-      console.log('продолжаю выполнятся ');
-      if (index !== -1) {
-        this.arrayTodo[index].completed = updatedTodo.completed;
-      } else {
-        alert('Задача не найдена');
-      }
-
-    } catch (error) {
-      alert('Произошла ошибка при обновлении задачи:');
-    }
-  }
-
-  async deleteTodo(idBtn) {
-    let userID = globalState.get('userId')
-    let jsonUserTodos = await getUserTodos(userID)
-    if (jsonUserTodos) {
-      this.arrayTodo = this.arrayTodo.filter(item => item.id != +idBtn)
-      console.log('Новый после удаления');
+    if (newTask.value != '') {
+      let newToDo = await newTodoApi(userID, newTask.value)
+      this.arrayTodo.push(newToDo)
+      updateState('arrayTodo', this.arrayTodo)
+      console.log('newTodo');
       console.log(this.arrayTodo);
       this.renderTodoList(this.arrayTodo)
     }
+
+  }
+
+  async updateToDo(postId) {
+    const updatedTodo = await updatedTodoApi(postId);
+    const index = this.arrayTodo.findIndex(todo => todo.id === postId);
+    if (index !== -1) {
+      this.arrayTodo[index].completed = updatedTodo.completed;
+    }
+  }
+  async deleteTodo(idBtn) {
+    this.arrayTodo = this.arrayTodo.filter(item => item.id != +idBtn)
+    console.log(this.arrayTodo);
+    this.renderTodoList(this.arrayTodo)
   }
 
 
@@ -155,6 +142,7 @@ export default class todoList {
       this.task.appendChild(div); // Добавляет div в this.task
 
     });
+    console.log(this.arrayTodo);
 
   }
 

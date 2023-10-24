@@ -7,6 +7,7 @@ export default class todoList {
   }
   async specialToDo(jsonUserTodos) {
     this.arrayTodo = []
+    updateState('arrayTodo', this.arrayTodo)
     jsonUserTodos = { userId: 0, id: 1, title: 'Зарядится позитивом )', completed: false, href: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' }
     this.arrayTodo.push(jsonUserTodos)
   }
@@ -105,6 +106,9 @@ export default class todoList {
     this.arrayTodo = [...globalState.get('arrayTodo')]
     if (newTask.value != '') {
       let newToDo = await newTodoApi(userID, newTask.value)
+      let lastId=this.arrayTodo[this.arrayTodo.length-1].id
+      newToDo.id=lastId+1
+      console.log(newToDo.id);
       this.arrayTodo.push(newToDo)
       updateState('arrayTodo', this.arrayTodo)
       console.log('newTodo');
@@ -120,10 +124,13 @@ export default class todoList {
     if (index !== -1) {
       this.arrayTodo[index].completed = updatedTodo.completed;
     }
+    updateState('arrayTodo', this.arrayTodo)
   }
+
   async deleteTodo(idBtn) {
-    this.arrayTodo = this.arrayTodo.filter(item => item.id != +idBtn)
+    this.arrayTodo = this.arrayTodo.filter((item) =>item.id != +idBtn)
     console.log(this.arrayTodo);
+    updateState('arrayTodo', this.arrayTodo)
     this.renderTodoList(this.arrayTodo)
   }
 
@@ -131,7 +138,7 @@ export default class todoList {
   renderTodoList(jsonUserTodos) {
     this.clearDivToDo()
     jsonUserTodos.forEach((element, id) => {
-      const div = this.createDivContentToDo(id, element.href); // Создает div
+      const div = this.createDivContentToDo(element.id, element.href); // Создает div
       const input = this.createInputElement(id, element.completed); // Создает input
       const span = this.createSpanElement(id, element.title, element.userId);
       const button = this.createDeleteButtonElement(element.id); // Создает button

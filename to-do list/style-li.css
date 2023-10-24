@@ -47,3 +47,36 @@
     max-height: 553px;
     overflow-y: auto;
 }
+
+.divform {
+    padding: 20px;
+    border: 1px solid #d9d8d8;
+    border-radius: 5px;
+    background-color: #ffffff;
+  }
+  
+  .divform input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .divform button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .divform button:hover {
+    background-color: #0056b3;
+  }
+
+
+

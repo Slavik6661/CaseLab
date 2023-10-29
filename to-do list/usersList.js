@@ -1,4 +1,4 @@
-import { getUsersData, getUserTodos } from "./api.js";
+import { getUsersData, getUserTodos, createUserApi } from "./api.js";
 import { globalState, updateState } from "./globalState.js"
 import todoList from "./todolist.js";
 let todoListData = new todoList()
@@ -14,8 +14,6 @@ export default class userList {
   async fetchUsersData() {
     let jsonUsers = await getUsersData()
     try {
-      console.log(jsonUsers);
-      jsonUsers.unshift({ name: '>>>> Rick Astley <<<<', id: 0 })
       this.renderUsers(jsonUsers)
       updateState('userList', jsonUsers)
     }
@@ -40,7 +38,6 @@ export default class userList {
 
   addEventListenerElements() {
     let userId
-    let previousValue
     this.modalForm()
     this.divUsersList.onchange = (e) => {
       userId = e.target.value
@@ -57,10 +54,14 @@ export default class userList {
     })
   }
 
-  addNewUser() {
+  async addNewUser() {
     let userName = document.getElementById('user-name').value;
+    let user = await createUserApi(userName)
+    console.log(user.id);
     let userList = globalState.get('userList')
-    userList.push({ name: userName, id: userList.length })
+    userList.push({ name: userName, id: userList.length + 1 })
+    console.log('userList', userList);
+    alert('пользователь успешно добавлен')
     this.renderUsers(userList)
   }
   modalForm() {

@@ -4,11 +4,8 @@ function checkNet() {
     if (navigator.onLine) {
         alert('проблема на стороне сервера')
     } else {
-        alert('Проблема с интернет подключением ' + count++);
-        if (count > 2) {
-            window.open('https://www.youtube.com/watch?v=SRARPdrTUp0&t=2s', '');
-            count = 0
-        }
+        alert('Проблема с интернет подключением ');
+
 
     }
 }
@@ -95,6 +92,25 @@ export async function deleteTodoApi(todoId) {
     try {
         let response = await fetch(`https://jsonplaceholder.typicode.com/posts/${todoId}`, {
             method: 'DELETE',
+        })
+        if (!response.ok) {
+            alert('error response')
+            throw new Error('error response')
+        }
+        return await response.json()
+    }
+    catch (error) {
+        checkNet()
+    }
+}
+
+export async function createUserApi(userName) {
+    try {
+        let response = await fetch(`https://jsonplaceholder.typicode.com/users/`, {
+            method: 'POST',
+            body: JSON.stringify({
+                name: userName,
+            }),
         })
         if (!response.ok) {
             alert('error response')

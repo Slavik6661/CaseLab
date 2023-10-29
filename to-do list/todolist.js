@@ -5,38 +5,21 @@ export default class todoList {
     this.task = document.querySelector("#todo-list");
     this.arrayTodo = []
   }
-  async specialToDo(jsonUserTodos) {
-    this.arrayTodo = []
-    updateState('arrayTodo', this.arrayTodo)
-    jsonUserTodos = { userId: 0, id: 1, title: 'Зарядится позитивом )', completed: false, href: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' }
-    this.arrayTodo.push(jsonUserTodos)
-  }
+
 
   async fetchDataTodos() {
-
     let userID = globalState.get('userId')
     let jsonUserTodos = await getUserTodos(userID)
-    if (userID == 0) {
-      this.specialToDo(jsonUserTodos)
-    } else {
-      this.arrayTodo = [...jsonUserTodos]
-      updateState('arrayTodo', this.arrayTodo)
-      console.log(this.arrayTodo);
-    }
-
+    console.log(jsonUserTodos);
+    this.arrayTodo = [...jsonUserTodos]
+    updateState('arrayTodo', this.arrayTodo)
+    console.log(this.arrayTodo);
     this.renderTodoList(this.arrayTodo)
   }
-  createDivContentToDo(id, taskLink = '') {
+  createDivContentToDo(id) {
     let divContentTodo = document.createElement('div')
     divContentTodo.id = id
     divContentTodo.classList.add('todo-item')
-
-    if (taskLink) {
-      divContentTodo.style.cursor = 'pointer';
-      divContentTodo.addEventListener('click', () => {
-        window.open(taskLink, '')
-      });
-    }
     return divContentTodo;
   }
 
@@ -106,8 +89,8 @@ export default class todoList {
     this.arrayTodo = [...globalState.get('arrayTodo')]
     if (newTask.value != '') {
       let newToDo = await newTodoApi(userID, newTask.value)
-      let lastId=this.arrayTodo[this.arrayTodo.length-1].id
-      newToDo.id=lastId+1
+      let lastId = this.arrayTodo[this.arrayTodo.length - 1].id
+      newToDo.id = lastId + 1
       console.log(newToDo.id);
       this.arrayTodo.push(newToDo)
       updateState('arrayTodo', this.arrayTodo)
@@ -128,7 +111,7 @@ export default class todoList {
   }
 
   async deleteTodo(idBtn) {
-    this.arrayTodo = this.arrayTodo.filter((item) =>item.id != +idBtn)
+    this.arrayTodo = this.arrayTodo.filter((item) => item.id != +idBtn)
     console.log(this.arrayTodo);
     updateState('arrayTodo', this.arrayTodo)
     this.renderTodoList(this.arrayTodo)
@@ -136,19 +119,24 @@ export default class todoList {
 
 
   renderTodoList(jsonUserTodos) {
-    this.clearDivToDo()
-    jsonUserTodos.forEach((element, id) => {
-      const div = this.createDivContentToDo(element.id, element.href); // Создает div
-      const input = this.createInputElement(id, element.completed); // Создает input
-      const span = this.createSpanElement(id, element.title, element.userId);
-      const button = this.createDeleteButtonElement(element.id); // Создает button
+    if (jsonUserTodos.length < 1) {
+      document.getElementById('todo-list-container').innerHTML = '<p style="text-align: center;">Список пуст</p>';
 
-      div.appendChild(input); // Добавляет input в div
-      div.appendChild(span); // Добавляет label в div
-      div.appendChild(button); // Добавляет button в div
-      this.task.appendChild(div); // Добавляет div в this.task
+    } else {
+      this.clearDivToDo()
+      jsonUserTodos.forEach((element, id) => {
+        const div = this.createDivContentToDo(element.id, element.href); // Создает div
+        const input = this.createInputElement(id, element.completed); // Создает input
+        const span = this.createSpanElement(id, element.title, element.userId);
+        const button = this.createDeleteButtonElement(element.id); // Создает button
 
-    });
+        div.appendChild(input); // Добавляет input в div
+        div.appendChild(span); // Добавляет label в div
+        div.appendChild(button); // Добавляет button в div
+        this.task.appendChild(div); // Добавляет div в this.task
+
+      });
+    }
     console.log(this.arrayTodo);
 
   }
